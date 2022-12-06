@@ -1,22 +1,27 @@
 package kr.ac.kumoh.s20180488.w1401customlist
 
 import android.app.Application
+import android.graphics.Bitmap
 import android.widget.Toast
+import androidx.collection.LruCache
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.URLEncoder
 
 class CryptoViewModel(application: Application) : AndroidViewModel(application) {
     data class Crypto(var id: Int, var name: String, var fullname: String, var price: Double, var image: String)
 
     companion object {
         const val QUEUE_TAG = "CryptoVolleyRequest"
+        const val SERVER_URL = "https://expresssongdb-ntcon.run.goorm.io/"
     }
 
     private val coins = ArrayList<Crypto>()
@@ -25,20 +30,32 @@ class CryptoViewModel(application: Application) : AndroidViewModel(application) 
         get() = _list
 
     private var queue: RequestQueue
+    val imageLoader: ImageLoader
 
     init {
         _list.value = coins
         queue = Volley.newRequestQueue(getApplication())
+        imageLoader = ImageLoader(queue,
+            object : ImageLoader.ImageCache {
+                private val cache = LruCache<String, Bitmap>(100)
+                override fun getBitmap(url: String): Bitmap? {
+                    return cache.get(url)
+                }
+                override fun putBitmap(url: String, bitmap: Bitmap) {
+                    cache.put(url, bitmap)
+                }
+            })
     }
+    fun getImageUrl(i: Int): String = "${SERVER_URL}/image/" + URLEncoder.encode(coins[i].image, "utf-8")
 
-    fun requestSong() {
+    fun requestCrypto() {
         // NOTE: 서버 주소는 본인의 서버 IP 사용할 것
-        val url = "https://expresssongdb-ntcon.run.goorm.io/crypto"
+
 
         // Array를 반환할 경우에는 JsonObjectRequest 대신 JsonArrayRequest 사용
         val request = JsonArrayRequest(
             Request.Method.GET,
-            url,
+            "${SERVER_URL}/crypto",
             null,
             {
                 //Toast.makeText(getApplication(), it.toString(), Toast.LENGTH_LONG).show()

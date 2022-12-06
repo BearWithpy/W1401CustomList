@@ -7,11 +7,19 @@
 
     android:padding="16dp"
     android:background="@android:drawable/dialog_holo_light_frame">
-    <ImageView
+<!--    <ImageView-->
+<!--        android:id="@+id/image"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="#aaa"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        android:contentDescription="@string/item_song_logo" />-->
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/image"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="#aaa"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
