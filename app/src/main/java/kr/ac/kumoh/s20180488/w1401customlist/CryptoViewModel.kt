@@ -12,6 +12,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import kr.ac.kumoh.s20180488.w1401customlist.databinding.ActivityCryptoBinding
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URLEncoder
@@ -49,10 +50,6 @@ class CryptoViewModel(application: Application) : AndroidViewModel(application) 
     fun getImageUrl(i: Int): String = "${SERVER_URL}/image/" + URLEncoder.encode(coins[i].image, "utf-8")
 
     fun requestCrypto() {
-        // NOTE: 서버 주소는 본인의 서버 IP 사용할 것
-
-
-        // Array를 반환할 경우에는 JsonObjectRequest 대신 JsonArrayRequest 사용
         val request = JsonArrayRequest(
             Request.Method.GET,
             "${SERVER_URL}/crypto",
